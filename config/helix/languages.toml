@@ -1,0 +1,338 @@
+[[language]]
+name = "markdown"
+auto-format = true
+formatter = { command = "dprint", args = ["fmt", "--stdin", "md"] }
+language-servers = ["marksman", "mdpls"]
+
+[language-server.mdpls]
+command = "mdpls"
+config = { markdown.preview.auto = false, markdown.preview.browser = "zen-browser" }
+
+
+[[language]]
+name = "toml"
+formatter = { command = "taplo", args = ["format", "-"] }
+auto-format = true
+
+[[language]]
+name = "python"
+# use pylsp-mypy for mypy
+language-servers = ["pylsp", "ruff"]
+formatter = { command = "ruff", args = ["format", "-n", "-"] }
+auto-format = true
+
+# [language-server.ruff]
+# command = "ruff"
+# args = ["server", "--preview"]
+# config = { settings = { organizeImports = true, lint.run = "onSave" } }
+
+# [[language]]
+# name = "fish"
+# formatter = { command = "fish_indent" }
+# auto-format = true
+
+# [language-server.efm]
+# command = "efm-langserver"
+
+# [[language]]
+# name = "php"
+# language-servers = [
+#   { name = "phpactor", except-features = [
+#     "format",
+#   ] },
+#   { name = "phan", except-features = [
+#     "format",
+#   ] },
+#   { name = "psalm", except-features = [
+#     "format",
+#   ] },
+#   { name = "efm", only-features = [
+#     "code-action",
+#     "diagnostics",
+#   ] }, # for phpstan
+# ]
+# formatter = { command = "pretty-php", args = [
+#   "--psr12",
+#   "--preset",
+#   "laravel",
+#   "-",
+# ] }
+# auto-format = true
+
+# [language-server.phpactor]
+# command = "phpactor"
+# args = ["language-server"]
+
+# [language-server.phan]
+# command = "./vendor/bin/phan"
+# args = [
+#   "--language-server-on-stdin",
+#   "--output-mode",
+#   "json",
+#   "--no-color",
+#   "--no-progress-bar",
+# ]
+
+# [language-server.psalm]
+# command = "./vendor/bin/psalm"
+# args = ["--language-server"]
+
+[[language]]
+name = "lua"
+language-servers = [
+  { name = "lua-language-server", except-features = ["format"] },
+  { name = "efm", only-features = ["diagnostics", "code-action"] }, # for selene
+]
+formatter = { command = "stylua", args = ["-"] }
+auto-format = true
+
+[language-server.lua-language-server.config.Lua]
+format.enable = false
+runtime.version = "LuaJIT"
+diagnostics.globals = ["vim"]
+workspace.library = [
+  "/usr/share/nvim/runtime/lua",
+  "/usr/share/nvim/runtime/lua/vim",
+  "/usr/share/nvim/runtime/lua/vim/lsp",
+]
+
+# [[language]]
+# name = "zig"
+# auto-format = true
+
+# [language-server.zls.config]
+# enable_build_on_save = true
+# enable_autofix = false
+# warn_style = true
+# highlight_global_var_declarations = true
+
+# [[language]]
+# name = "gas"
+# file-types = ["s", "S"]
+# language-servers = ["asm-lsp"]
+
+# [language-server.asm-lsp]
+# command = "asm-lsp"
+# args = []
+# config = { filetypes = ["s", "S"] }
+
+# [[language]]
+# name = "rust"
+# auto-format = true
+
+# [language-server.rust-analyzer.config]
+# check.command = "clippy"
+# check.features = "all"
+# completion.fullFunctionSignatures.enable = true
+# diagnostics.experimental.enable = true
+# diagnostics.styleLints.enable = true
+# hover.actions.references.enable = true
+# hover.memoryLayout.niche = true
+# inlayHints.bindingModeHints.enable = true
+# inlayHints.closingBraceHints.minLines = 1
+# inlayHints.closureCaptureHints.enable = true
+# inlayHints.closureReturnTypeHints.enable = "always"           # with_block
+# inlayHints.closureStyle = "rust_analyzer"                     # impl_fn | with_id
+# inlayHints.discriminantHints.enable = "always"                # fieldless
+# inlayHints.expressionAdjustmentHints.enable = "reborrow_only"
+# inlayHints.genericParameterHints.lifetime.enable = true
+# inlayHints.genericParameterHints.type.enable = true
+# inlayHints.implicitDrops.enable = false
+# inlayHints.lifetimeElisionHints.enable = "always"             # skip_trivial
+# inlayHints.lifetimeElisionHints.useParameterNames = true
+# inlayHints.rangeExclusiveHints.enable = true
+# interpret.tests = true
+# lens.references.adt.enable = true
+# lens.references.enumVariant.enable = true
+# lens.references.method.enable = true
+# lens.references.trait.enable = true
+# semanticHighlighting.operator.specialization.enable = true
+# semanticHighlighting.punctuation.separate.macro.bang = true
+# semanticHighlighting.punctuation.specialization.enable = true
+# typing.autoClosingAngleBrackets.enable = true
+
+# [[language]]
+# name = "dockerfile"
+# language-servers = [
+#   "docker-langserver",
+#   { name = "efm", only-features = [
+#     "code-action",
+#     "diagnostics",
+#   ] }, # for hadolint
+# ]
+
+[[language]]
+name = "yaml"
+file-types = ["yml", "yaml", { glob = "phpstan.neon" }]
+
+[[language]]
+name = "git-config"
+file-types = [
+  { glob = "git/config" },
+  { glob = ".gitmodules" },
+  { glob = ".gitconfig" },
+  { glob = ".git/config" },
+  { glob = ".config/git/config" },
+]
+
+[language-server.clangd]
+command = "clangd"
+args = ["--clang-tidy", "-j=5", "--malloc-trim"]
+
+[[language]]
+name = "c"
+language-servers = [
+  "clangd",
+  { name = "efm", only-features = ["diagnostics"] }, # gcc lints and cppcheck
+]
+file-types = ["c", "h"]
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+
+
+[[language]]
+name = "cpp"
+indent = { tab-width = 4, unit = "    " }
+
+[[language]]
+name = "bash"
+formatter = { command = "shfmt", args = ["--indent", "2", "-"] }
+auto-format = true
+
+[[language]]
+name = "pkgbuild"
+formatter = { command = "shfmt", args = ["--indent", "2", "-"] }
+auto-format = true
+language-servers = [
+  "pkgbuild-language-server",
+  { except-features = [
+    # "diagnostics",
+  ], name = "bash-language-server" },
+]
+
+# [[language]]
+# name = "mojo"
+# scope = "source.mojo"
+# file-types = ["mojo", "🔥", { glob = "__init__.mojo" }]
+# shebangs = ["mojo"]
+# injection-regex = "mojo"
+# roots = []
+# formatter = { command = "mojo", args = ["format", "-"] }
+# auto-format = true
+# comment-token = "#"
+# language-servers = ["mojo-lsp-server"]
+# indent = { tab-width = 4, unit = "    " }
+# grammar = "python"
+
+# [language-server.mojo-lsp-server]
+# command = "mojo-lsp-server"
+
+# # improve debug configuration with https://docs.modular.com/mojo/tools/debugging#mojo-launch-configurations
+# # also have a look at js completion template
+# [language.debugger]
+# name = "mojo-lldb-dap"
+# transport = "stdio"
+# command = "mojo-lldb-dap"
+
+# [[language.debugger.templates]]
+# name = "binary"
+# request = "launch"
+# completion = [{ name = "binary", completion = "filename" }]
+# args = { console = "internalConsole", program = "{0}", runInTerminal = false, initCommands = [
+# ] }
+
+[language-server.vscode-css-language-server.config]
+# https://code.visualstudio.com/docs/languages/css#_customizing-css-scss-and-less-settings
+css.lint.unknownAtRules = "ignore"
+
+[language-server.tailwindcss-lsp]
+command = "tailwindcss-language-server"
+args = ["--stdio"]
+
+[language-server.tailwindcss-lsp.config]
+includeLanguages = { tailwindcss = "css" }
+
+[[language]]
+name = "html"
+language-servers = [
+  "vscode-html-language-server",
+  "superhtml",
+  "tailwindcss-lsp",
+]
+
+[language-server.biome]
+command = "biome"
+args = ["lsp-proxy"]
+
+[[language]]
+name = "css"
+language-servers = [
+  { name = "vscode-css-language-server", except-features = [
+    "format",
+  ] },
+  "tailwindcss-lsp",
+  "biome",
+]
+auto-format = true
+
+[[language]]
+name = "javascript"
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+auto-format = true
+
+[[language]]
+name = "typescript"
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+auto-format = true
+
+[[language]]
+name = "tsx"
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "tailwindcss-lsp",
+  "biome",
+]
+auto-format = true
+
+[[language]]
+name = "jsx"
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  "tailwindcss-lsp",
+  "biome",
+]
+auto-format = true
+
+[[language]]
+name = "json"
+language-servers = [
+  { name = "vscode-json-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+auto-format = true
+
+[[language]]
+name = "jsonc"
+language-servers = [
+  { name = "vscode-json-language-server", except-features = [
+    "format",
+  ] },
+  "biome",
+]
+auto-format = true
