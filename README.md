@@ -1,7 +1,7 @@
-[](https://ohmyz.sh/)
+[Ohmyzsh](https://ohmyz.sh/)
 
-[](https://github.com/romkatv/powerlevel10k)
+[p10k](https://github.com/romkatv/powerlevel10k)
 
-[](https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md)
-[](https://github.com/zsh-users/zsh-completions)
-[](https://github.com/zsh-users/zsh-syntax-highlighting)
+[zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md)
+[zsh-completions](https://github.com/zsh-users/zsh-completions)
+[zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
