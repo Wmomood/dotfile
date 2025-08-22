@@ -1,44 +1,59 @@
 #!/bin/bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# weather info from wttr. https://github.com/chubin/wttr.in
-# Remember to add city 
 
-city=Hualien
-cachedir=~/.cache/rbn
-cachefile=${0##*/}-$1
+city=Taipei
+cachedir="$HOME/.cache/rbn"
+cachefile="${0##*/}"
+[ -n "$1" ] && cachefile="$cachefile-$1"
 
-if [ ! -d $cachedir ]; then
-    mkdir -p $cachedir
+mkdir -p "$cachedir"
+
+if [ ! -f "$cachedir/$cachefile" ]; then
+    touch "$cachedir/$cachefile"
 fi
 
-if [ ! -f $cachedir/$cachefile ]; then
-    touch $cachedir/$cachefile
-fi
-
-# Save current IFS
+# Save and change IFS
 SAVEIFS=$IFS
-# Change IFS to new line.
 IFS=$'\n'
 
-cacheage=$(($(date +%s) - $(stat -c '%Y' "$cachedir/$cachefile")))
-if [ $cacheage -gt 1740 ] || [ ! -s $cachedir/$cachefile ]; then
-    data=($(curl -s https://en.wttr.in/"$city"$1\?0qnT 2>&1))
-    echo ${data[0]} | cut -f1 -d, > $cachedir/$cachefile
-    echo ${data[1]} | sed -E 's/^.{15}//' >> $cachedir/$cachefile
-    echo ${data[2]} | sed -E 's/^.{15}//' >> $cachedir/$cachefile
+if stat --version &>/dev/null; then
+    cacheage=$(($(date +%s) - $(stat -c '%Y' "$cachedir/$cachefile")))
+else
+    cacheage=$(($(date +%s) - $(stat -f '%m' "$cachedir/$cachefile")))
 fi
 
-weather=($(cat $cachedir/$cachefile))
+if [ "$cacheage" -gt 1740 ] || [ ! -s "$cachedir/$cachefile" ]; then
+    data=($(curl -s https://en.wttr.in/"$city"$1\?0qnT 2>/dev/null))
+    
+    if [ ${#data[@]} -lt 3 ]; then
+        echo "Error: Failed to fetch weather data" > "$cachedir/$cachefile"
+        exit 1
+    fi
 
-# Restore IFSClear
+    echo "${data[0]}" | cut -f1 -d, > "$cachedir/$cachefile"
+    echo "${data[1]}" | sed -E 's/^.{15}//' >> "$cachedir/$cachefile"
+    echo "${data[2]}" | sed -E 's/^.{15}//' >> "$cachedir/$cachefile"
+fi
+
+mapfile -t weather < "$cachedir/$cachefile"
+
 IFS=$SAVEIFS
 
-temperature=$(echo ${weather[2]} | sed -E 's/([[:digit:]]+)\.\./\1 to /g')
+temperature=$(echo "${weather[2]}" | sed -E 's/([[:digit:]]+)\.\.([[:digit:]]+)/\1 to \2/g' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//') # Remove leading/trailing spaces
+escaped_weather=$(echo "${weather[1]}" | sed 's/"/\\"/g')
 
-#echo ${weather[1]##*,}
+weather_condition=$(echo "${weather[1]}" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 
-# https://fontawesome.com/icons?s=solid&c=weather
-case $(echo ${weather[1]##*,} | tr '[:upper:]' '[:lower:]') in
+# Debug the cleaned string and its length
+# echo "Cleaned Weather condition: $weather_condition"
+# echo "Weather condition length: ${#weather_condition}"
+
+# Force conversion to lowercase
+weather_condition_lower=$(echo "$weather_condition" | tr '[:upper:]' '[:lower:]')
+
+# Debug the lowercase version
+# echo "Lowercase Weather condition: $weather_condition_lower"
+
+case "$weather_condition_lower" in
 "clear" | "sunny")
     condition=""
     ;;
@@ -74,14 +89,12 @@ case $(echo ${weather[1]##*,} | tr '[:upper:]' '[:lower:]') in
     ;;
 *)
     condition=""
-    echo -e "{\"text\":\""$condition"\", \"alt\":\""${weather[0]}"\", \"tooltip\":\""${weather[0]}: $temperature ${weather[1]}"\"}"
     ;;
 esac
 
-#echo $temp $condition
-
-echo -e "{\"text\":\""$temperature $condition"\", \"alt\":\""${weather[0]}"\", \"tooltip\":\""${weather[0]}: $temperature ${weather[1]}"\"}"
+# Output the weather info with condition symbol and temperature
+echo -e "{\"text\":\"$temperature $condition\", \"alt\":\"${weather[0]}\", \"tooltip\":\"${weather[0]}: $temperature ${escaped_weather}\"}"
 
 cached_weather=" $temperature  \n$condition ${weather[1]}"
 
-echo -e $cached_weather >  ~/.cache/.weather_cache
+echo -e "$cached_weather" >  ~/.cache/.weather_cache

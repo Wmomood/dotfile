@@ -63,12 +63,12 @@ style = ["opacity 1"]
     "sleep 0.2; hyprpicker --format [format] | wl-copy" # sleep to let the menu close before the picker opens
 ]
 
-screenshot = [
+Screenshot = [
     {name="what", options=["output", "window", "region", "active"]},
     "hyprshot -s -m [what] -o /tmp -f shot_[what].png"
 ]
 
-annotate = [
+Annotate = [
     {name="fname", command="ls /tmp/shot_*.png"},
     "satty --filename '[fname]' --output-filename '/tmp/annotated.png'"
 ]
@@ -86,19 +86,24 @@ annotate = [
 # ]
 # 
 
+"Games" = "pypr menu Games"
+
+"AntimicroX" = "antimicrox &"
+
 "Note" = "kitty helix Documents/momo/note.md"
 
 
-"Games" = "pypr menu Games"
+"Tmux" = "kitty tmux"
 
+# "tmux momo" = "kitty tmux a -t momo &"
 
-"tmux" = "kitty tmux"
+# "tmux pi" = "kitty tmux a -t pi & "
 
-"tmux momo" = "kitty tmux a -t momo &"
+"Toggle sharescreen(5)" = "pkill wf-recorder || sharescreen"
 
-"tmux pi" = "kitty tmux a -t pi & "
+"Toggle scrcpy camera(6)" = "pkill scrcpy || scrcpy --video-source=camera --camera-facing=front --no-audio --camera-size=800x600 -d"
 
-"pyprland config" = "kitty h ~/.config/hypr/pyprland.toml"
+"Pyprland config" = "kitty h ~/.config/hypr/pyprland.toml"
 
 "Reload pypr" = "pypr reload"
 
@@ -109,9 +114,6 @@ annotate = [
 "Genshin Impact" = "xdg-open heroic://launch/legendary/41869934302e4b8cafac2d3c0e7c293d"
 "Zenless Zone Zero" = "xdg-open heroic://launch/legendary/525aa0efd70f4399b9f64bcd2a5b38c7"
 "Warframe" = "xdg-open heroic://launch/legendary/398965b67f314d31b0683b8ea11c93a4"
-"Counter-Strike 2" = "steam steam://rungameid/730"
-"Out of Line" = "xdg-open heroic://launch/legendary/6b994d7f4f2a4e85a54d5c2ede6d2fed"
-"Psycho Bathroom" = "steam steam://rungameid/1601340"
 "Lutris" = "lutris %U"
 "Steam (Native)" = "/usr/bin/steam-native %U"
 "Heroic Games Launcher" = "/opt/Heroic/heroic %U"

@@ -127,7 +127,7 @@
 "clock#2": {
     "format": "  {:%I:%M %p}", // AM PM format
     //"format": "  {:%H:%M}",// 24H
-    "format-alt": "{:%b%e  |  %I:%M %p  |  %a}",
+    "format-alt": "{:%b %e  |  %I:%M %p  |  %a }",
     // "format-alt": "{:%A  |  %H:%M  |  %e %B}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
 },
@@ -237,7 +237,7 @@
 },
 
 "mpris": {
-	"interval": 5,
+	"interval": 3,
 	"format": "{player_icon} <i>{dynamic}</i>",
 	"format-paused": "{status_icon} <i>{dynamic}</i>",
 	// "on-click-middle": "playerctl play-pause",
@@ -268,7 +268,7 @@
 		"stopped": "",
 	},
 	"ignored-players": ["firefox", "zen"],
-	"max-length": 25,
+	"max-length": 20,
 },
 
 "network": {
